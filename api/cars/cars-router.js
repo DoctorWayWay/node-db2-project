@@ -1,6 +1,9 @@
 // ===== IMPORTS =====
 const router = require("express").Router()
 const Cars = require("./cars-model")
+const {
+  checkCarId
+} = require("./cars-middleware")
 
 
 // ===== ENDPOINTS =====
@@ -9,6 +12,17 @@ router.get("/", async (req, res, next) => {
   try {
     const allCars = await Cars.getAll()
     res.status(200).json(allCars)
+  } catch (err) {
+    next(err)
+  }
+})
+
+// [GET] - /api/cars/:id (returns a single car by id)
+router.get("/:id", checkCarId, async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const car = await Cars.getById(id)
+    res.status(200).json(car)
   } catch (err) {
     next(err)
   }
