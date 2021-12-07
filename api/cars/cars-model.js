@@ -14,8 +14,11 @@ const getById = async (id) => {
   return car
 }
 
-const create = async () => {
-  // DO YOUR MAGIC
+const create = async (newCar) => {
+  const [newCarId] = await db("cars")
+    .insert(newCar)
+  const [postedCar] = await getById(newCarId)
+  return postedCar
 }
 
 module.exports = {
