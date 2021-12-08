@@ -14,15 +14,25 @@ const getById = async (id) => {
   return car
 }
 
+const findVin = async (vin) => {
+  const [foundVin] = await db("cars")
+    .select("vin")
+    .where({ vin: vin })
+  return foundVin
+}
+
 const create = async (newCar) => {
-  const [newCarId] = await db("cars")
-    .insert(newCar)
-  const [postedCar] = await getById(newCarId)
-  return postedCar
+  const [newCarId] = await db("cars").insert(newCar)
+  const postedCar = await getById(newCarId)
+  return {
+    id: newCarId,
+    ...postedCar
+  }
 }
 
 module.exports = {
   getAll,
   getById,
   create,
+  findVin,
 }
